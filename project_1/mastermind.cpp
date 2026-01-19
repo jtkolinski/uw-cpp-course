@@ -24,10 +24,10 @@ void exit_with_error()
 
 class NormalExitException : public std::exception {};
 
-// Funkcja konwertuje ciąg znaków na size_t, sprawdzając czy wartość
-// mieści się w przedziale [min_val, max_val].
-// Jeśli konwersja się nie powiedzie lub wartość jest poza zakresem,
-// powoduje zakończenie programu z błędem.
+// The function converts a string to size_t, checking if the value
+// is within the range [min_val, max_val].
+// If the conversion fails or the value is out of range,
+// it causes the program to terminate with an error.
 size_t convert_input(std::string_view input, size_t min_val, size_t max_val)
 {
     size_t value = 0;
@@ -47,10 +47,10 @@ size_t convert_input(std::string_view input, size_t min_val, size_t max_val)
     return value;
 }
 
-// Funkcja wczytuje linię ze standardowego wejścia i parsuje ją jako
-// wektor liczb całkowitych oddzielonych spacjami.
-// Każda wartość musi być w zakresie [0, max_val].
-// Wektor musi mieć dokładnie 'len' elementów.
+// The function reads a line from standard input and parses it as
+// a vector of integers separated by spaces.
+// Each value must be in the range [0, max_val].
+// The vector must have exactly 'len' elements.
 std::vector<uint8_t> input_vector(size_t len, uint8_t max_val)
 {
     std::string input;
@@ -94,9 +94,9 @@ void output_vector(std::vector<uint8_t> &out)
 
 } // namespace
 
-// Funkcja implementuje rolę kodującego w grze Mastermind.
-// Wczytuje próby gracza i odpowiada liczbą trafień na właściwych pozycjach
-// oraz liczbą trafień na złych pozycjach, aż do odgadnięcia sekwencji.
+// The function implements the codemaker role in the Mastermind game.
+// It reads the player's attempts and responds with the number of hits on correct positions
+// and the number of hits on wrong positions, until the sequence is guessed.
 void codemaker(size_t num_colors, std::vector<uint8_t> &secret_sequence)
 {
     size_t sequence_len = secret_sequence.size();
@@ -142,12 +142,12 @@ void codemaker(size_t num_colors, std::vector<uint8_t> &secret_sequence)
     }
 }
 
-// Funkcja implementuje zgadującego kod w grze Mastermind.
-// Wykorzystuje następującą strategię do odgadnięcia sekwencji:
-// 1. Określa liczbę wystąpień każdego koloru przez zapytania o jednorodne
-// sekwencje
-// 2. Określa kolor na każdej pozycji poprzez pytanie o każdą z nich z
-// zamrożonymi wartościami na innych pozycjach
+// The function implements the codebreaker in the Mastermind game.
+// It uses the following strategy to guess the sequence:
+// 1. Determines the number of occurrences of each color by querying homogeneous
+// sequences
+// 2. Determines the color at each position by querying each of them with
+// frozen values at other positions
 void codebreaker(size_t num_colors, size_t sequence_len)
 {
     auto final_guess = [&](std::vector<uint8_t> &result) {
@@ -194,17 +194,17 @@ void codebreaker(size_t num_colors, size_t sequence_len)
             max_present = i;
         }
     }
-    // Usuwamy ostatniego, by nie powtarzać zapytania o pełen ciąg
+    // We remove the last one to avoid repeating the query for the full sequence
     present_values.pop_back();
 
     std::vector<uint8_t> result = std::vector<uint8_t>(sequence_len);
 
-    // Logika odgadywania koloru na pozycji i:
-    // - Jeśli position_matches wzrosło o 1: kolor występuje na tej pozycji
-    // - Jeśli value_matches wynosi 1: kolor należy do sekwencji, ale na innej
-    //   pozycji
-    // - Jeśli position_matches spadło o 1 i value_matches wynosi 2 przy
-    //   pierwszej próbie: kolor max_present występuje na tej pozycji
+    // Logic for guessing the color at position i:
+    // - If position_matches increased by 1: the color occurs at this position
+    // - If value_matches is 1: the color belongs to the sequence, but at a different
+    //   position
+    // - If position_matches decreased by 1 and value_matches is 2 at the
+    //   first attempt: the max_present color occurs at this position
     for (size_t i = 0; i < sequence_len; ++i) {
         bool first_guess = true;
         bool guessed = false;
